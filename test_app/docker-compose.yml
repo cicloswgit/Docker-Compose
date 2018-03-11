@@ -1,0 +1,92 @@
+
+#version: '2'
+#services:
+#  test:
+#    build: .
+#    command: bundle exec rspec
+#    container_name: test_app
+#    environment:
+#      - SELENIUM_REMOTE_HOST=selenium
+#    volumes:
+#      - .:/app
+#    depends_on:
+#      - selenium
+#  selenium:
+#    image: selenium/standalone-firefox
+#    container_name: selenium
+
+
+# To execute this docker-compose yml file use docker-compose -f <file_name> up
+# Add the "-d" flag at the end for deattached execution
+version: '2'
+services:
+ 
+  chrome:
+    build: .
+    command: bundle exec rspec
+    container_name: chrome
+    volumes:
+      - .:/app
+    depends_on:
+      - selenium-chrome
+
+  firefox:
+    build: .
+    command: bundle exec rspec
+    container_name: firefox
+    volumes:
+      - .:/app
+    depends_on:
+      - selenium-firefox
+
+  opera:
+    build: .
+    command: bundle exec rspec
+    container_name: opera
+    volumes:
+      - .:/app
+    depends_on:
+      - selenium-opera
+
+
+#  firefox:
+#    image: selenium/node-firefox:3.10.0-argon
+#    build: .
+#    command: bundle exec rspec
+#    volumes:
+#      - /dev/shm:/dev/shm
+#    depends_on:
+#      - hub
+#    environment:
+#      HUB_HOST: hub
+
+#  chrome:
+#    image: selenium/node-chrome:3.10.0-argon
+#    build: .
+#    command: bundle exec rspec
+#    volumes:
+#      - /dev/shm:/dev/shm
+#    depends_on:
+#      - hub
+#    environment:
+#      HUB_HOST: hub
+
+  selenium-chrome:
+    image: selenoid/chrome
+    ports:
+      - "4446:4446"
+
+  selenium-firefox:
+    image: selenoid/firefox
+    ports:
+      - "4447:4447"
+
+  selenium-opera:
+    image: selenoid/opera
+    ports:
+      - "4448:4448"
+
+  hub:
+    image: selenium/hub:3.10.0-argon
+    ports:
+      - "4445:4445"
